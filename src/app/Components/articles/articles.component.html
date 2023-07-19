@@ -1,0 +1,74 @@
+<button class="btn btn-success" style="margin:20px;" data-toggle="modal" data-target="#addeditArticle" (click)="openModelCreate()"> Create new article</button>
+<table class="table" style="margin-top: 20px;">
+  <thead>
+    <tr>
+      <th scope="col">Code Article</th>
+      <th scope="col">Client</th>
+      <th scope="col">Texte de marquage</th>
+      <th scope="col" colspan="2">Actions</th>
+      <th scope="col">Télecharger Qr Code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of list" >
+      <th scope="row">{{item.code_article}}</th>
+      <td>{{item.client}}</td>
+      <td>{{item.texte_marquage}}</td>
+      <td><button class="btn btn-warning" data-toggle="modal" data-target="#addeditArticle" (click)="openModel(item)"> Edit</button></td>
+      <td> <button class="btn btn-danger" (click)="deleteArticle(item.id)"> Delete</button></td>
+      <td>
+        <qrcode
+      class="qrcode"
+      (qrCodeURL)="onChangeURL($event, item)"
+      [qrdata]="item.id"
+      [width]="100"
+      [errorCorrectionLevel]="'M'"
+    ></qrcode>
+    <a [href]="getQrCodeDownloadLink(item)" download="qrcode" class="btn btn-primary">Download</a>
+  </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addeditArticle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onSubmit()" #myForm="ngForm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Code Article</span>
+            </div>
+            <input type="text" class="form-control" name="codeArticle" [(ngModel)]="newArticle.code_article" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Client</span>
+            </div>
+            <input type="text" class="form-control" name="client" [(ngModel)]="newArticle.client" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+          </div>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Texte de marquage</span>
+            </div>
+            <input type="text" class="form-control" name="textemarquage" [(ngModel)]="newArticle.texte_marquage" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+          </div>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
